@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+    <!-- I hate the favicon error messages oh my browser's inspect -->
+
+    <title>Vanilla JS 2 Afternoon Project - Mouse Party</title>
+</head>
+
+<body>
+    <style>
+        
+
+        html { 
+        background: url(https://media.giphy.com/media/134DVXcD94sOWI/giphy.gif) no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        }
+
+        #wrap {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #wrap * {
+            pointer-events: none;
+        }
+
+        #wrap h1 {
+            color: rgba(0, 0, 0, 0.884);
+            font-size: 2rem;
+            text-transform: uppercase;
+            text-align: center;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            background-color:  rgb(228, 228, 228);
+            opacity: 0.6;
+        }
+
+        .ball {
+            position: absolute;
+            border-radius: 50%;
+            animation: shrink 1s ease-in-out both;
+            opacity: .5;
+        }
+
+        @keyframes shrink {
+            100% {
+                transform: scale(0)
+            }
+        }
+    </style>
+    <div id="wrap">
+        <h1>"Party time? FALSE. Get back to work."
+        </h1>
+    </div>
+</body>
+
+
+
+
+
+<script>
+let mousePosition = { 
+    x: 0, 
+    y: 0 
+    };
+
+    let drawId;
+
+// - We will also pass in a function being the task to be performed when the mouse moves. We can either write the function inline as a function expression `('mousemove' function(){})` or make a name function and pass that in, `('mousemove', onMove)`. It will not make a difference either way.
+
+    let mickey = function(min, max) {
+      return Math.round(Math.random() * (max - min + 1)) + min;
+};
+
+console.log(mickey) //for inspect
+
+window.addEventListener('mousemove', function(e) {
+        mousePosition.x = e.pageX;
+        mousePosition.y = e.pageY;
+});
+
+
+function draw() {
+  return setInterval(function() {
+         const container = document.getElementById('wrap');
+         const color = `background:rgb(${mickey(0, 255)},${mickey(
+         0,
+         255
+    )}, 
+    
+    ${mickey(0, 255)});`;
+      const ballSize = mickey(5, 10);
+        const size = `height:${ballSize}px; width:${ballSize}px;`;
+        const left = `left:${mickey(
+      mousePosition.x - ballSize,
+      mousePosition.x
+    )}px;`;
+        const top = `top:${mickey(
+      mousePosition.y - ballSize,
+      mousePosition.y
+    )}px;`;
+         const style = `${left}${top}${color}${size}`;
+
+    const ball = document.createElement('div');
+    ball.classList.add('ball');
+    ball.style = style;
+
+    ball.addEventListener('animationend', function(e) {
+      e.target.remove();
+    });
+
+    container.appendChild(ball);
+  }, 50);
+}
+    window.addEventListener('mouseover', function() {
+  drawId = draw();
+});
+    window.addEventListener('mouseout', function() {
+  clearInterval(drawId);
+});
+
+</script>
+
+</html>
